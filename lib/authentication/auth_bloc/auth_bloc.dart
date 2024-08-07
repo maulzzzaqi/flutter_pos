@@ -40,6 +40,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(AuthState(errorMessage: e.toString()));
         }
       });
+      on<AuthLogout>((event, emit) async {
+        await FirebaseAuth.instance.signOut();
+        emit(const AuthState());
+      });
     });
   }
 }

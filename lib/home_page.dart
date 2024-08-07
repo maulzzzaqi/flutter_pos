@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_pos/authentication/auth_bloc/auth_bloc.dart';
 import 'package:flutter_pos/authentication/login_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -15,7 +17,8 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
+              context.read<AuthBloc>().add(const AuthLogout());
+              Navigator.pushReplacementNamed(context, '/login');
             },
           )
         ],
