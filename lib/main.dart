@@ -1,7 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_pos/authentication/auth_bloc/auth_bloc.dart';
 import 'package:flutter_pos/authentication/login_page.dart';
+import 'package:flutter_pos/authentication/register_page.dart';
 import 'package:flutter_pos/firebase_options.dart';
+import 'package:flutter_pos/home_page.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -13,8 +17,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LoginPage()
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthBloc(),
+        ),
+      ],
+      child: MaterialApp(
+        initialRoute: RegisterPage.route,
+        routes: {
+          LoginPage.route: (context) => LoginPage(),
+          RegisterPage.route: (context) => RegisterPage(),
+          HomePage.route: (context) => HomePage(),
+        },
+      ),
     );
   }
 }
