@@ -16,6 +16,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           final auth = await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: event.email,
             password: event.password,
+
           );
           // Add more user information
           await FirebaseFirestore.instance.collection('users').doc(auth.user!.uid).set({
@@ -23,7 +24,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             'phoneNumber': event.phoneNumber,
             'email': event.email,
           });
-          emit(AuthState(userData: auth.user));
+          // Fetch additional user information
+          final userData = await FirebaseFirestore.instance.collection('users').doc(auth.user?.uid).get();
+          emit(AuthState(userData: auth.user, name: userData['name'], phoneNumber: userData['phoneNumber']));
         } catch (e) {
           emit(AuthState(errorMessage: e.toString()));
         }
@@ -31,16 +34,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       on<AuthLogin>((event, emit) async {
         emit(const AuthState(isLoading: true));
         try {
+          // Initialize Login
           final auth = await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: event.email,
             password: event.password
           );
-          emit(AuthState(userData: auth.user)); 
+          // Fetch additional user information
+          final userData = await FirebaseFirestore.instance.collection('users').doc(auth.user?.uid).get();
+          emit(AuthState(userData: auth.user, name: userData['name'], phoneNumber: userData['phoneNumber'])); 
         } catch (e) {
           emit(AuthState(errorMessage: e.toString()));
         }
       });
       on<AuthLogout>((event, emit) async {
+        // Initialize Logout
         await FirebaseAuth.instance.signOut();
         emit(const AuthState());
       });

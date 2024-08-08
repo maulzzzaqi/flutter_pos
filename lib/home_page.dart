@@ -18,24 +18,36 @@ class HomePage extends StatelessWidget {
             icon: const Icon(Icons.logout),
             onPressed: () {
               context.read<AuthBloc>().add(const AuthLogout());
-              Navigator.pushReplacementNamed(context, '/login');
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
             },
           )
         ],
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text('Currently logged in user: ',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
-            Text(
-              'Email: ',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 20),
-          ],
-        ),
+      body: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          if (state.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state.userData != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Currently logged in user:',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  ),
+                  Text('Email: ${state.userData?.email}'),
+                  Text('UID: ${state.userData?.uid}'),
+                  Text('Name: ${state.name}'),
+                  Text('Phone Number: ${state.phoneNumber}'),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            );
+          } else {
+            return const Center(child: Text('No user data available.'));
+          }
+        },
       ),
     );
   }
