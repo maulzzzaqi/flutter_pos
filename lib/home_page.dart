@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos/authentication/auth_bloc/auth_bloc.dart';
 import 'package:flutter_pos/authentication/login_page.dart';
+import 'package:flutter_pos/cart/cart_page.dart';
 import 'package:flutter_pos/menu/add_menu_page.dart';
 import 'package:flutter_pos/menu/menu_bloc/menu_bloc.dart';
 
@@ -30,6 +31,12 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddMenuPage()));
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CartPage()));
             },
           ),
           IconButton(

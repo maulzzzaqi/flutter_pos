@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_pos/cart/cart_bloc/cart_bloc.dart';
+import 'package:flutter_pos/cart/model/cart.dart';
 import 'package:flutter_pos/menu/menu_bloc/menu_bloc.dart';
 
 class MenuPage extends StatefulWidget {
@@ -91,6 +93,15 @@ class _MenuPageState extends State<MenuPage> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        context.read<CartBloc>().add(AddToCartEvent(Cart.fromMenu(menuItem)));
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(content: Text('${menuItem.name} added to cart!'))
+                                        );
+                                      },
+                                      icon: const Icon(Icons.add),
+                                    ),
                                     IconButton(
                                       icon: const Icon(Icons.edit),
                                       onPressed: () {

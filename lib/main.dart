@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos/authentication/auth_bloc/auth_bloc.dart';
 import 'package:flutter_pos/authentication/login_page.dart';
 import 'package:flutter_pos/authentication/register_page.dart';
+import 'package:flutter_pos/cart/cart_bloc/cart_bloc.dart';
+import 'package:flutter_pos/cart/cart_page.dart';
 import 'package:flutter_pos/firebase_options.dart';
 import 'package:flutter_pos/home_page.dart';
 import 'package:flutter_pos/menu/menu_bloc/menu_bloc.dart';
@@ -26,7 +28,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => MenuBloc(),
-        )
+        ),
+        BlocProvider(
+          create: (context) => CartBloc(),
+        ),
       ],
       child: MaterialApp(
         initialRoute: RegisterPage.route,
@@ -35,6 +40,7 @@ class MyApp extends StatelessWidget {
           RegisterPage.route: (context) => RegisterPage(),
           HomePage.route: (context) => HomePage(),
           MenuPage.route: (context) => MenuPage(),
+          CartPage.route: (context) => CartPage(),
         },
       ),
     );
