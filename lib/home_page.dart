@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos/authentication/auth_bloc/auth_bloc.dart';
 import 'package:flutter_pos/authentication/login_page.dart';
+import 'package:flutter_pos/menu/add_menu_page.dart';
 
 class HomePage extends StatelessWidget {
   static const String route = '/home';
@@ -14,6 +15,12 @@ class HomePage extends StatelessWidget {
         title: const Text('Home Page'),
         backgroundColor: Colors.blue.shade400,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddMenuPage()));
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
