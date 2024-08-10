@@ -25,12 +25,34 @@ class CartPage extends StatelessWidget {
                   trailing: Column(
                     children: [
                       Text('Rp. ${item.price * item.quantity}'),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove),
+                            onPressed: () {
+                              context
+                                  .read<CartBloc>()
+                                  .add(DecreaseQuantityEvent(item));
+                            },
+                          ),
+                          Text('${item.quantity}'),
+                          IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () {
+                              context
+                                  .read<CartBloc>()
+                                  .add(IncreaseQuantityEvent(item));
+                            },
+                          ),
+                        ],
+                      ),
                       IconButton(
                         onPressed: () {
                           context.read<CartBloc>().add(RemoveCartEvent(item));
                         },
                         icon: const Icon(Icons.delete),
-                      )
+                      ),
                     ],
                   ),
                 );
