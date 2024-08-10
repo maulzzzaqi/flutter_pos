@@ -6,6 +6,8 @@ import 'package:flutter_pos/authentication/login_page.dart';
 import 'package:flutter_pos/authentication/register_page.dart';
 import 'package:flutter_pos/firebase_options.dart';
 import 'package:flutter_pos/home_page.dart';
+import 'package:flutter_pos/menu/menu_bloc/menu_bloc.dart';
+import 'package:flutter_pos/menu_page.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -22,6 +24,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AuthBloc(),
         ),
+        BlocProvider(
+          create: (context) => MenuBloc(),
+        )
       ],
       child: MaterialApp(
         initialRoute: RegisterPage.route,
@@ -29,6 +34,7 @@ class MyApp extends StatelessWidget {
           LoginPage.route: (context) => LoginPage(),
           RegisterPage.route: (context) => RegisterPage(),
           HomePage.route: (context) => HomePage(),
+          MenuPage.route: (context) => MenuPage(),
         },
       ),
     );

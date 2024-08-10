@@ -18,3 +18,10 @@ class AddMenuEvent extends MenuEvent {
   @override
   List<Object> get props => [name, price, description, category];
 }
+
+class LoadMenuEvent extends MenuEvent {
+  const LoadMenuEvent();
+
+  @override
+  List<Object> get props => [];
+}

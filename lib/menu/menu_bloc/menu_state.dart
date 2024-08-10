@@ -29,3 +29,12 @@ class MenuError extends MenuState {
   @override
   List<Object> get props => [error];
 }
+
+class MenuLoaded extends MenuState {
+  final List<Menu> menu;
+
+  const MenuLoaded(this.menu);
+
+  @override
+  List<Object> get props => [menu];
+}
