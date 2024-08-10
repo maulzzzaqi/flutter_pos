@@ -88,6 +88,98 @@ class _MenuPageState extends State<MenuPage> {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context, 
+                                          builder: (context) {
+                                            final nameController = TextEditingController(text: menuItem.name);
+                                            final priceController = TextEditingController(text: menuItem.price.toString());
+                                            final descriptionController = TextEditingController(text: menuItem.description);
+                                            final categoryController = TextEditingController(text: menuItem.category);
+
+                                            return AlertDialog(
+                                              title: const Text('Edit Menu Item'),
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  TextField(
+                                                    controller: nameController,
+                                                    decoration: const InputDecoration(labelText: 'Name'),
+                                                  ),
+                                                  TextField(
+                                                    controller: priceController,
+                                                    decoration: const InputDecoration(labelText: 'Price'),
+                                                  ),
+                                                  TextField(
+                                                    controller: descriptionController,
+                                                    decoration: const InputDecoration(labelText: 'Description'),
+                                                  ),
+                                                  TextField(
+                                                    controller: categoryController,
+                                                    decoration: const InputDecoration(labelText: 'Category'),
+                                                  ),
+                                                ],
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    context.read<MenuBloc>().add(EditMenuEvent(
+                                                      menuItem.id,
+                                                      nameController.text,
+                                                      double.parse(priceController.text),
+                                                      descriptionController.text,
+                                                      categoryController.text
+                                                    ));
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('Save Menu'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: const Text('Delete Menu Item'),
+                                            content: const Text('Are you sure you want to delete this item?'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('Cancel'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  context.read<MenuBloc>().add(DeleteMenuEvent(menuItem.id));
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('Delete'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ),

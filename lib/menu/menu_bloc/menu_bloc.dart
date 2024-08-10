@@ -24,6 +24,33 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
           emit(MenuError(e.toString()));
         }
       });
+      // Edit Menu
+      on<EditMenuEvent>((event, emit) async {
+        emit(const MenuLoading());
+        try {
+          await FirebaseFirestore.instance.collection('menu').doc(event.id).update({
+            'name': event.name,
+            'price': event.price,
+            'description': event.description,
+            'category': event.category,
+          });
+          emit(const MenuSuccess());
+          add(const LoadMenuEvent());
+        } catch (e) {
+          emit(MenuError(e.toString()));
+        }
+      });
+      // Delete menu from firestore
+      on<DeleteMenuEvent>((event, emit) async {
+        emit(const MenuLoading());
+        try {
+          await FirebaseFirestore.instance.collection('menu').doc(event.id).delete();
+          emit(const MenuSuccess());
+          add(const LoadMenuEvent());
+        } catch (e) {
+          emit(MenuError(e.toString()));
+        }
+      });
       // Read Menu from firestore
       on<LoadMenuEvent>((event, emit) async {
         emit(const MenuLoading());
