@@ -30,6 +30,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           emit(CartLoaded([event.item]));
         }
       });
+      on<RemoveCartEvent>((event, emit) {
+        final currentState = state;
+        if (currentState is CartLoaded) {
+          final cart = List<Cart>.from(currentState.items)
+            ..removeWhere((item) => item.id == event.item.id);
+          emit(CartLoaded(cart));
+        }
+      });
     });
   }
 }

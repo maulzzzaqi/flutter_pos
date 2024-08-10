@@ -16,6 +16,15 @@ class AddToCartEvent extends CartEvent {
   List<Object> get props => [item];
 }
 
+class RemoveCartEvent extends CartEvent {
+  final Cart item;
+
+  const RemoveCartEvent(this.item);
+
+  @override
+  List<Object> get props => [item];
+}
+
 class LoadCartEvent extends CartEvent {
   const LoadCartEvent();
 

@@ -22,8 +22,17 @@ class CartPage extends StatelessWidget {
                 return ListTile(
                   title: Text(item.name),
                   subtitle: Text('Quantity: ${item.quantity}'),
-                  trailing: Text('Rp. ${item.price * item.quantity}'),
-                  onLongPress: () {},
+                  trailing: Column(
+                    children: [
+                      Text('Rp. ${item.price * item.quantity}'),
+                      IconButton(
+                        onPressed: () {
+                          context.read<CartBloc>().add(RemoveCartEvent(item));
+                        },
+                        icon: const Icon(Icons.delete),
+                      )
+                    ],
+                  ),
                 );
               },
             );
