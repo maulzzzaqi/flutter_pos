@@ -8,49 +8,47 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(const AuthState()) {
-    on<AuthEvent>((event, emit) {
-      on<AuthRegister>((event, emit) async {
-        emit(const AuthState(isLoading: true));
-        try {
-          // Initialize Register
-          final auth = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: event.email,
-            password: event.password,
+    on<AuthRegister>((event, emit) async {
+      emit(const AuthState(isLoading: true));
+      try {
+        // Initialize Register
+        final auth = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: event.email,
+          password: event.password,
 
-          );
-          // Add more user information
-          await FirebaseFirestore.instance.collection('users').doc(auth.user!.uid).set({
-            'name': event.name,
-            'phoneNumber': event.phoneNumber,
-            'email': event.email,
-          });
-          // Fetch additional user information
-          final userData = await FirebaseFirestore.instance.collection('users').doc(auth.user?.uid).get();
-          emit(AuthState(userData: auth.user, name: userData['name'], phoneNumber: userData['phoneNumber']));
-        } catch (e) {
-          emit(AuthState(errorMessage: e.toString()));
-        }
-      });
-      on<AuthLogin>((event, emit) async {
-        emit(const AuthState(isLoading: true));
-        try {
-          // Initialize Login
-          final auth = await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: event.email,
-            password: event.password
-          );
-          // Fetch additional user information
-          final userData = await FirebaseFirestore.instance.collection('users').doc(auth.user?.uid).get();
-          emit(AuthState(userData: auth.user, name: userData['name'], phoneNumber: userData['phoneNumber'])); 
-        } catch (e) {
-          emit(AuthState(errorMessage: e.toString()));
-        }
-      });
-      on<AuthLogout>((event, emit) async {
-        // Initialize Logout
-        await FirebaseAuth.instance.signOut();
-        emit(const AuthState());
-      });
+        );
+        // Add more user information
+        await FirebaseFirestore.instance.collection('users').doc(auth.user!.uid).set({
+          'name': event.name,
+          'phoneNumber': event.phoneNumber,
+          'email': event.email,
+        });
+        // Fetch additional user information
+        final userData = await FirebaseFirestore.instance.collection('users').doc(auth.user?.uid).get();
+        emit(AuthState(userData: auth.user, name: userData['name'], phoneNumber: userData['phoneNumber']));
+      } catch (e) {
+        emit(AuthState(errorMessage: e.toString()));
+      }
+    });
+    on<AuthLogin>((event, emit) async {
+      emit(const AuthState(isLoading: true));
+      try {
+        // Initialize Login
+        final auth = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: event.email,
+          password: event.password
+        );
+        // Fetch additional user information
+        final userData = await FirebaseFirestore.instance.collection('users').doc(auth.user?.uid).get();
+        emit(AuthState(userData: auth.user, name: userData['name'], phoneNumber: userData['phoneNumber'])); 
+      } catch (e) {
+        emit(AuthState(errorMessage: e.toString()));
+      }
+    });
+    on<AuthLogout>((event, emit) async {
+      // Initialize Logout
+      await FirebaseAuth.instance.signOut();
+      emit(const AuthState());
     });
   }
 }
