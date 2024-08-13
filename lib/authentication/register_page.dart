@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos/authentication/auth_bloc/auth_bloc.dart';
-import 'package:flutter_pos/authentication/login_page.dart';
-import 'package:flutter_pos/home_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RegisterPage extends StatelessWidget {
   static const String route = '/register';
@@ -16,6 +15,17 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Sign Up for a New Account',
+          style: GoogleFonts.rubik(
+            color: const Color(0xFF1A72DD),
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state.userData != null) {
@@ -28,59 +38,126 @@ class RegisterPage extends StatelessWidget {
         },
         builder: (context, state) {
           return Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(20),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Name',
+                      style: GoogleFonts.rubik(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400
                       ),
-                      labelText: 'Name',
                     ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextField(
-                    controller: phoneNumberController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        hintText: 'Your Username',
+                        hintStyle: GoogleFonts.rubik(
+                          color: Colors.grey,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderSide: BorderSide.none
+                        ),
                       ),
-                      labelText: 'Phone Number',
                     ),
-                  ),
+                  ],
                 ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Phone Number',
+                      style: GoogleFonts.rubik(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400
                       ),
-                      labelText: 'Email',
                     ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: phoneNumberController,
+                      decoration: InputDecoration(
+                        hintText: 'Phone Number',
+                        hintStyle: GoogleFonts.rubik(
+                          color: Colors.grey,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderSide: BorderSide.none
+                        ),
                       ),
-                      labelText: 'Password',
                     ),
-                  ),
+                  ],
                 ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Email',
+                      style: GoogleFonts.rubik(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        hintText: 'Email',
+                        hintStyle: GoogleFonts.rubik(
+                          color: Colors.grey,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderSide: BorderSide.none
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Password',
+                      style: GoogleFonts.rubik(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        hintText: 'Your Password',
+                        hintStyle: GoogleFonts.rubik(
+                          color: Colors.grey,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderSide: BorderSide.none
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30),
                 if (state.isLoading)
                   const CircularProgressIndicator()
                 else 
@@ -90,9 +167,10 @@ class RegisterPage extends StatelessWidget {
                         width: MediaQuery.of(context).size.width * 0.9,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF18C563),
+                            backgroundColor: const Color(0xFF1A72DD),
+                            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
                             shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              borderRadius: BorderRadius.all(Radius.circular(16)),
                             ),
                           ),
                           onPressed: () {
@@ -109,24 +187,32 @@ class RegisterPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 5),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey.shade300,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Already have an account? ',
+                            style: GoogleFonts.rubik(
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginPage()));
-                          },
-                          child: const Text(
-                            'Already have an account? Login here!',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(context, '/login');
+                            },
+                            child: RichText(
+                              text: TextSpan(
+                                text: 'Log in here.',
+                                style: GoogleFonts.rubik(
+                                  color: const Color(0xFF1A72DD),
+                                  fontWeight: FontWeight.w500,
+                                  decoration: TextDecoration.underline
+                                )
+                              ),
+                            ),
+                          )
+                        ],
                       )
                     ],
                   ),
