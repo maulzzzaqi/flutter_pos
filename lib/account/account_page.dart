@@ -37,12 +37,12 @@ class AccountPage extends StatelessWidget {
                         CircleAvatar(
                           backgroundColor: const Color(0xFF1A72DD),
                           radius: 50,
-                          backgroundImage: NetworkImage(''),
-                          child: Icon(
-                            Icons.person,
-                            size: 50,
-                            color: Colors.white,
-                          )
+                          backgroundImage: state.profileImageUrl != null && state.profileImageUrl!.isNotEmpty
+                            ? NetworkImage(state.profileImageUrl!)
+                            : null,
+                          child: state.profileImageUrl == null || state.profileImageUrl!.isEmpty
+                            ? const Icon(Icons.account_circle, size: 50, color: Colors.white)
+                            : null,
                         ),
                         const SizedBox(width: 14),
                         Column(

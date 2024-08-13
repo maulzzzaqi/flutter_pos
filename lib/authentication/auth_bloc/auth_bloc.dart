@@ -1,13 +1,44 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  StreamSubscription<DocumentSnapshot>? userSubscription;
   AuthBloc() : super(const AuthState()) {
+    // Upload user profile image
+    on<AuthUploadImage>((event, emit) async {
+      emit(state.copyWith(isLoading: true));
+      try {
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          final storageRef = FirebaseStorage.instance.ref().child('profile_images').child('${user.uid}.jpg');
+          await storageRef.putFile(event.imageFile);
+          final imageUrl = await storageRef.getDownloadURL();
+
+          await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+            'profileImageUrl': imageUrl,
+          });
+
+          final userData = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+          emit(state.copyWith(
+            isLoading: false,
+            userData: user,
+            name: userData['name'],
+            phoneNumber: userData['phoneNumber'],
+          ));
+        }
+      } catch (e) {
+        emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      }
+    });
     on<AuthRegister>((event, emit) async {
       emit(const AuthState(isLoading: true));
       try {
@@ -50,15 +81,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         final user = FirebaseAuth.instance.currentUser;
         if (user != null) {
-          await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+          final updatedData = {
             'name': event.name,
             'phoneNumber': event.phoneNumber,
-          });
+          };
+
+          if (event.profileImageUrl != null) {
+            updatedData['profileImageUrl'] = event.profileImageUrl!;
+          }
+
+          await FirebaseFirestore.instance.collection('users').doc(state.userData?.uid).update(updatedData);
           final newUserData = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
           emit(state.copyWith(
             isLoading: false,
             name: newUserData['name'],
             phoneNumber: newUserData['phoneNumber'],
+            profileImageUrl: newUserData['profileImageUrl'],
           ));
         }
       } catch (e) {
