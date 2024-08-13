@@ -50,10 +50,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(const AuthState());
     });
     // Auto Login
-    on<AuthCheck>((event, emit) {
+    on<AuthCheck>((event, emit) async {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        emit(AuthState(userData: user));
+        final userData = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+        emit(AuthState(userData: user, name: userData['name'], phoneNumber: userData['phoneNumber']));
       } else {
         emit(const AuthState());
       }
