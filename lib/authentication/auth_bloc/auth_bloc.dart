@@ -113,7 +113,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         final userData = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-        emit(AuthState(userData: user, name: userData['name'], phoneNumber: userData['phoneNumber']));
+        final userDataLogin = userData.data() ?? {};
+        final profileImageUrl = userDataLogin['profileImageUrl'];
+        emit(AuthState(userData: user, name: userData['name'], phoneNumber: userData['phoneNumber'], profileImageUrl: profileImageUrl));
       } else {
         emit(const AuthState());
       }
