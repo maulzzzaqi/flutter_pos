@@ -15,8 +15,9 @@ import 'package:flutter_pos/welcome/welcome_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
-          initialRoute: WelcomePage.route,
+          initialRoute: SplashPage.route,
           routes: {
             SplashPage.route: (context) => SplashPage(),
             WelcomePage.route: (context) => WelcomePage(),

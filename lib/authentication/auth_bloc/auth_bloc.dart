@@ -15,7 +15,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final auth = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: event.email,
           password: event.password,
-
         );
         // Add more user information
         await FirebaseFirestore.instance.collection('users').doc(auth.user!.uid).set({
@@ -50,5 +49,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await FirebaseAuth.instance.signOut();
       emit(const AuthState());
     });
+    // Auto Login
+    on<AuthCheck>((event, emit) {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        emit(AuthState(userData: user));
+      } else {
+        emit(const AuthState());
+      }
+    });
+    add(const AuthCheck());
+    
   }
 }

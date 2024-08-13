@@ -13,7 +13,11 @@ class AuthRegister extends AuthEvent {
   final String name;
   final String phoneNumber;
 
-  const AuthRegister({required this.email, required this.password, required this.name, required this.phoneNumber});
+  const AuthRegister(
+      {required this.email,
+      required this.password,
+      required this.name,
+      required this.phoneNumber});
 
   @override
   List<Object> get props => [email, password, name, phoneNumber];
@@ -27,6 +31,13 @@ class AuthLogin extends AuthEvent {
 
   @override
   List<Object> get props => [email, password];
+}
+
+class AuthCheck extends AuthEvent {
+  const AuthCheck();
+
+  @override
+  List<Object> get props => [];
 }
 
 class AuthLogout extends AuthEvent {
