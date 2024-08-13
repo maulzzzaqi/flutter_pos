@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos/account/account_page.dart';
+import 'package:flutter_pos/account/account_settings_page.dart';
 import 'package:flutter_pos/authentication/auth_bloc/auth_bloc.dart';
 import 'package:flutter_pos/authentication/login_page.dart';
 import 'package:flutter_pos/authentication/register_page.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
             RegisterPage.route: (context) => RegisterPage(),
             HomePage.route: (context) => HomePage(),
             AccountPage.route: (context) => AccountPage(),
+            AccountSettingsPage.route: (context) => AccountSettingsPage(),
             MenuPage.route: (context) => MenuPage(),
             CartPage.route: (context) => CartPage(),
           },

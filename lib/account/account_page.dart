@@ -92,7 +92,7 @@ class AccountPage extends StatelessWidget {
                               bottom: BorderSide(color: Colors.black, width: 0.3, style: BorderStyle.solid),
                             ),
                             onTap: () {
-                              
+                              Navigator.pushNamed(context, '/account_settings');
                             },
                           ),
                           ListTile(

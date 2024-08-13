@@ -40,6 +40,16 @@ class AuthCheck extends AuthEvent {
   List<Object> get props => [];
 }
 
+class AuthUpdate extends AuthEvent {
+  final String name;
+  final String phoneNumber;
+
+  const AuthUpdate({required this.name, required this.phoneNumber});
+
+  @override
+  List<Object> get props => [name, phoneNumber];
+}
+
 class AuthLogout extends AuthEvent {
   const AuthLogout();
 

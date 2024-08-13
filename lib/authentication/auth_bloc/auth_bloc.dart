@@ -44,6 +44,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthState(errorMessage: e.toString()));
       }
     });
+    // Edit user information (name or phone number)
+    on<AuthUpdate>((event, emit) async {
+      emit(state.copyWith(isLoading: true));
+      try {
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+            'name': event.name,
+            'phoneNumber': event.phoneNumber,
+          });
+          final newUserData = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+          emit(state.copyWith(
+            isLoading: false,
+            name: newUserData['name'],
+            phoneNumber: newUserData['phoneNumber'],
+          ));
+        }
+      } catch (e) {
+        emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      }
+    });
     on<AuthLogout>((event, emit) async {
       // Initialize Logout
       await FirebaseAuth.instance.signOut();
