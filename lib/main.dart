@@ -11,6 +11,7 @@ import 'package:flutter_pos/home_page.dart';
 import 'package:flutter_pos/menu/menu_bloc/menu_bloc.dart';
 import 'package:flutter_pos/menu_page.dart';
 import 'package:flutter_pos/splash/splash_page.dart';
+import 'package:flutter_pos/welcome/welcome_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
@@ -43,9 +44,10 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
-          initialRoute: SplashPage.route,
+          initialRoute: WelcomePage.route,
           routes: {
             SplashPage.route: (context) => SplashPage(),
+            WelcomePage.route: (context) => WelcomePage(),
             LoginPage.route: (context) => LoginPage(),
             RegisterPage.route: (context) => RegisterPage(),
             HomePage.route: (context) => HomePage(),

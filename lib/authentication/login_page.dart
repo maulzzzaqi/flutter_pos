@@ -82,6 +82,7 @@ class LoginPage extends StatelessWidget {
                     const SizedBox(height: 10),
                     TextField(
                       controller: passwordController,
+                      obscureText: true,
                       decoration: InputDecoration(
                         hintText: 'Your Password',
                         hintStyle: GoogleFonts.rubik(
@@ -119,9 +120,9 @@ class LoginPage extends StatelessWidget {
                                     password: passwordController.text,
                                   ));
                             },
-                            child: const Text(
+                            child: Text(
                               'Login',
-                              style: TextStyle(color: Colors.white),
+                              style: GoogleFonts.rubik(color: Colors.white),
                             )),
                       ),
                       const SizedBox(height: 10),

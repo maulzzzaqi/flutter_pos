@@ -142,6 +142,7 @@ class RegisterPage extends StatelessWidget {
                     const SizedBox(height: 10),
                     TextField(
                       controller: passwordController,
+                      obscureText: true,
                       decoration: InputDecoration(
                         hintText: 'Your Password',
                         hintStyle: GoogleFonts.rubik(
@@ -181,9 +182,9 @@ class RegisterPage extends StatelessWidget {
                               phoneNumber: phoneNumberController.text,
                             ));
                           },
-                          child: const Text(
+                          child: Text(
                             'Register',
-                            style: TextStyle(color: Colors.white),
+                            style: GoogleFonts.rubik(color: Colors.white),
                           ),
                         ),
                       ),
