@@ -31,6 +31,7 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
           'imageUrl': imageUrl,
         });
         emit(const MenuSuccess());
+        add(const LoadMenuEvent());
       } catch (e) {
         emit(MenuError(e.toString()));
       }
@@ -97,5 +98,6 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
         emit(MenuError(e.toString()));
       }
     });
+    add(const LoadMenuEvent());
   }
 }

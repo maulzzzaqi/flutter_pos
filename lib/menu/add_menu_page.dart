@@ -196,8 +196,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                           if (category != null) {
                             context.read<MenuBloc>().add(AddMenuEvent(name, price, description, category, menuImage));
                             Future.delayed(const Duration(milliseconds: 300), () {
-                              Navigator.pop(context);
-                              Navigator.pushReplacementNamed(context, '/menu');
+                              Navigator.pushReplacementNamed(context, '/home');
                             });
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
