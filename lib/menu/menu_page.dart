@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos/cart/cart_bloc/cart_bloc.dart';
 import 'package:flutter_pos/cart/model/cart.dart';
+import 'package:flutter_pos/menu/detail_menu_page.dart';
 import 'package:flutter_pos/menu/menu_bloc/menu_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -58,7 +59,9 @@ class _MenuPageState extends State<MenuPage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailMenuPage(menuId: menuItem.id)));
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(10),
                             child: Column(
@@ -120,99 +123,6 @@ class _MenuPageState extends State<MenuPage> {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.edit, color: Color(0xFF1A72DD)),
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context, 
-                                          builder: (context) {
-                                            final nameController = TextEditingController(text: menuItem.name);
-                                            final priceController = TextEditingController(text: menuItem.price.toString());
-                                            final descriptionController = TextEditingController(text: menuItem.description);
-                                            final categoryController = TextEditingController(text: menuItem.category);
-
-                                            return AlertDialog(
-                                              title: const Text('Edit Menu Item'),
-                                              content: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  TextField(
-                                                    controller: nameController,
-                                                    decoration: const InputDecoration(labelText: 'Name'),
-                                                  ),
-                                                  TextField(
-                                                    controller: priceController,
-                                                    decoration: const InputDecoration(labelText: 'Price'),
-                                                  ),
-                                                  TextField(
-                                                    controller: descriptionController,
-                                                    decoration: const InputDecoration(labelText: 'Description'),
-                                                  ),
-                                                  TextField(
-                                                    controller: categoryController,
-                                                    decoration: const InputDecoration(labelText: 'Category'),
-                                                  ),
-                                                ],
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text('Cancel'),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    // // Add logic to handle image update if needed
-                                                    // context.read<MenuBloc>().add(EditMenuEvent(
-                                                    //   menuItem.id,
-                                                    //   nameController.text,
-                                                    //   double.parse(priceController.text),
-                                                    //   descriptionController.text,
-                                                    //   categoryController.text,
-                                                    // ));
-                                                    // Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text('Save Menu'),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete, color: Colors.red),
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) => AlertDialog(
-                                            title: const Text('Delete Menu Item'),
-                                            content: const Text('Are you sure you want to delete this item?'),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Cancel'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  context.read<MenuBloc>().add(DeleteMenuEvent(menuItem.id));
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('Delete'),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                )
                               ],
                             ),
                           ),

@@ -63,3 +63,13 @@ class LoadMenuEvent extends MenuEvent {
   @override
   List<Object> get props => [];
 }
+
+class LoadMenuDetailEvent extends MenuEvent {
+  final String id;
+
+  const LoadMenuDetailEvent(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+

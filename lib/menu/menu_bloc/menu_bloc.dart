@@ -98,6 +98,21 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
         emit(MenuError(e.toString()));
       }
     });
+    on<LoadMenuDetailEvent>((event, emit) async {
+      emit(const MenuLoading());
+      try {
+        final doc = await FirebaseFirestore.instance.collection('menu').doc(event.id).get();
+
+        if (doc.exists) {
+          final menu = Menu.fromSnapshot(doc);
+          emit(MenuDetailLoaded(menu));
+        } else {
+          emit(const MenuError('Menu Not Found!'));
+        }
+      } catch (e) {
+        emit(MenuError(e.toString()));
+      }
+    });
     add(const LoadMenuEvent());
   }
 }
