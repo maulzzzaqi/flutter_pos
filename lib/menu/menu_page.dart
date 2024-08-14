@@ -19,6 +19,7 @@ class _MenuPageState extends State<MenuPage> {
     context.read<MenuBloc>().add(const LoadMenuEvent());
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +48,7 @@ class _MenuPageState extends State<MenuPage> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
-                      childAspectRatio: 3 / 3,
+                      childAspectRatio: 3 / 4,
                     ),
                     itemCount: menuList.length,
                     itemBuilder: (context, index) {
@@ -63,6 +64,26 @@ class _MenuPageState extends State<MenuPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                menuItem.imageUrl != null
+                                  ? Image.network(
+                                      menuItem.imageUrl!,
+                                      fit: BoxFit.cover,
+                                      height: 100,
+                                      width: double.infinity,
+                                    )
+                                  : Container(
+                                      height: 100,
+                                      color: Colors.grey.shade200,
+                                      child: const Center(
+                                        child: Text(
+                                          'No Image',
+                                          style: TextStyle(
+                                            color: Colors.black54,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                const SizedBox(height: 8.0),
                                 Text(
                                   menuItem.name,
                                   style: const TextStyle(
@@ -103,7 +124,7 @@ class _MenuPageState extends State<MenuPage> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.edit, color: Color(0xFF1A72DD),),
+                                      icon: const Icon(Icons.edit, color: Color(0xFF1A72DD)),
                                       onPressed: () {
                                         showDialog(
                                           context: context, 
@@ -145,14 +166,15 @@ class _MenuPageState extends State<MenuPage> {
                                                 ),
                                                 TextButton(
                                                   onPressed: () {
-                                                    context.read<MenuBloc>().add(EditMenuEvent(
-                                                      menuItem.id,
-                                                      nameController.text,
-                                                      double.parse(priceController.text),
-                                                      descriptionController.text,
-                                                      categoryController.text
-                                                    ));
-                                                    Navigator.of(context).pop();
+                                                    // // Add logic to handle image update if needed
+                                                    // context.read<MenuBloc>().add(EditMenuEvent(
+                                                    //   menuItem.id,
+                                                    //   nameController.text,
+                                                    //   double.parse(priceController.text),
+                                                    //   descriptionController.text,
+                                                    //   categoryController.text,
+                                                    // ));
+                                                    // Navigator.of(context).pop();
                                                   },
                                                   child: const Text('Save Menu'),
                                                 ),

@@ -12,11 +12,14 @@ class AddMenuEvent extends MenuEvent {
   final double price;
   final String description;
   final String category;
+  final File? imageFile;
 
-  const AddMenuEvent(this.name, this.price, this.description, this.category);
+  const AddMenuEvent(
+      this.name, this.price, this.description, this.category, this.imageFile);
 
   @override
-  List<Object> get props => [name, price, description, category];
+  List<Object> get props =>
+      [name, price, description, category, imageFile ?? ''];
 }
 
 class EditMenuEvent extends MenuEvent {
@@ -25,11 +28,14 @@ class EditMenuEvent extends MenuEvent {
   final double price;
   final String description;
   final String category;
+  final File? imageFile;
 
-  const EditMenuEvent(this.id, this.name, this.price, this.description, this.category);
+  const EditMenuEvent(this.id, this.name, this.price, this.description,
+      this.category, this.imageFile);
 
   @override
-  List<Object> get props => [id, name, price, description, category];
+  List<Object> get props =>
+      [id, name, price, description, category, imageFile ?? ''];
 }
 
 class DeleteMenuEvent extends MenuEvent {
@@ -39,6 +45,16 @@ class DeleteMenuEvent extends MenuEvent {
 
   @override
   List<Object> get props => [id];
+}
+
+class UploadMenuImageEvent extends MenuEvent {
+  final File image;
+  final String menuUid;
+
+  const UploadMenuImageEvent(this.image, this.menuUid);
+
+  @override
+  List<Object> get props => [image, menuUid];
 }
 
 class LoadMenuEvent extends MenuEvent {
