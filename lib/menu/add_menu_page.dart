@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos/menu/menu_bloc/menu_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddMenuPage extends StatefulWidget {
   static const String route = '/add_menu';
@@ -21,6 +22,15 @@ class _AddMenuPageState extends State<AddMenuPage> {
   File? menuImage;
 
   final List<String> categories = ['Appetizer', 'Main Course', 'Dessert', 'Drink'];
+
+  Future<void> pickImage() async {
+    final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        menuImage = File(pickedImage.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +51,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
               descriptionController.clear();
               setState(() {
                 selectedCategory = null;
+                menuImage = null;
               });
             } else if (state is MenuError) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -55,6 +66,32 @@ class _AddMenuPageState extends State<AddMenuPage> {
               children: [
                 Column(
                   children: [
+                    GestureDetector(
+                      onTap: pickImage,
+                      child: Container(
+                        width: double.infinity,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade400),
+                          borderRadius: BorderRadius.circular(10),
+                          image: menuImage != null
+                              ? DecorationImage(
+                                  image: FileImage(menuImage!),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                        ),
+                        child: menuImage == null
+                            ? Center(
+                                child: Text(
+                                  'Pick Image',
+                                  style: GoogleFonts.rubik(color: Colors.black54),
+                                ),
+                              )
+                            : null,
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
                     TextField(
                       controller: nameController,
                       decoration: InputDecoration(
@@ -157,9 +194,9 @@ class _AddMenuPageState extends State<AddMenuPage> {
                           final category = selectedCategory;
                       
                           if (category != null) {
-                            context.read<MenuBloc>().add(AddMenuEvent(name, price, description, category));
-                            context.read<MenuBloc>().add(const LoadMenuEvent());
+                            context.read<MenuBloc>().add(AddMenuEvent(name, price, description, category, menuImage));
                             Future.delayed(const Duration(milliseconds: 300), () {
+                              Navigator.pop(context);
                               Navigator.pushReplacementNamed(context, '/menu');
                             });
                           } else {
@@ -169,7 +206,7 @@ class _AddMenuPageState extends State<AddMenuPage> {
                           }
                         },
                         child: Text(
-                          'Add Menu Item',
+                          'Add Menu',
                           style: GoogleFonts.rubik(
                             color: Colors.white,
                             fontSize: 16,

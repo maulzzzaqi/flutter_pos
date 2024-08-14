@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_pos/menu/model/menu.dart';
 
 part 'menu_event.dart';
@@ -12,11 +15,20 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     on<AddMenuEvent>((event, emit) async {
       emit(const MenuLoading());
       try {
-        await FirebaseFirestore.instance.collection('menu').add({
+        final menuRef = await FirebaseFirestore.instance.collection('menu').add({
           'name': event.name,
           'price': event.price,
           'description': event.description,
           'category': event.category,
+        });
+        String? imageUrl;
+        if (event.imageFile != null) {
+          final storageRef = FirebaseStorage.instance.ref().child('menu_images/${menuRef.id}');
+          await storageRef.putFile(event.imageFile!);
+          imageUrl = await storageRef.getDownloadURL();
+        }
+        await menuRef.update({
+          'imageUrl': imageUrl,
         });
         emit(const MenuSuccess());
       } catch (e) {
@@ -27,12 +39,22 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     on<EditMenuEvent>((event, emit) async {
       emit(const MenuLoading());
       try {
-        await FirebaseFirestore.instance.collection('menu').doc(event.id).update({
+        String? imageUrl;
+        if (event.imageFile != null) {
+          final storageRef = FirebaseStorage.instance.ref().child('menu_images/${event.id}');
+          await storageRef.putFile(event.imageFile!);
+          imageUrl = await storageRef.getDownloadURL();
+        }
+        final updateData = {
           'name': event.name,
           'price': event.price,
           'description': event.description,
           'category': event.category,
-        });
+        };
+        if (imageUrl != null) {
+          updateData['imageUrl'] = imageUrl;
+        }
+        await FirebaseFirestore.instance.collection('menu').doc(event.id).update(updateData);
         emit(const MenuSuccess());
         add(const LoadMenuEvent());
       } catch (e) {
@@ -59,6 +81,18 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
           return Menu.fromSnapshot(e);
         }).toList();
         emit(MenuLoaded(menu));
+      } catch (e) {
+        emit(MenuError(e.toString()));
+      }
+    });
+    on<UploadMenuImageEvent>((event, emit) async {
+      emit(const MenuLoading());
+      try {
+        final fileName = event.menuUid;
+        final storageRef = FirebaseStorage.instance.ref().child('menu_images/$fileName');
+        await storageRef.putFile(event.image);
+        final imageUrl = await storageRef.getDownloadURL();
+        emit(MenuImageUploaded(imageUrl));
       } catch (e) {
         emit(MenuError(e.toString()));
       }

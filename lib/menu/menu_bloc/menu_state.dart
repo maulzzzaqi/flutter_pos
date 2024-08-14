@@ -21,6 +21,15 @@ class MenuSuccess extends MenuState {
   List<Object> get props => [];
 }
 
+class MenuImageUploaded extends MenuState {
+  final String imageUrl;
+
+  const MenuImageUploaded(this.imageUrl);
+
+  @override
+  List<Object> get props => [imageUrl];
+}
+
 class MenuError extends MenuState {
   final String error;
 

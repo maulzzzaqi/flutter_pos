@@ -6,6 +6,7 @@ class Menu {
   final double price;
   final String description;
   final String category;
+  final String? imageUrl;
 
   const Menu({
     required this.id,
@@ -13,15 +14,18 @@ class Menu {
     required this.price,
     required this.description,
     required this.category,
+    this.imageUrl,
   });
 
   factory Menu.fromSnapshot(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
     return Menu(
       id: doc.id,
-      name: doc['name'],
-      price: doc['price'],
-      description: doc['description'],
-      category: doc['category']
+      name: data['name'],
+      price: data['price'],
+      description: data['description'],
+      category: data['category'],
+      imageUrl: data['imageUrl'],
     );
   }
 }
