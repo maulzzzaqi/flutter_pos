@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos/cart/cart_bloc/cart_bloc.dart';
 import 'package:flutter_pos/cart/model/cart.dart';
 import 'package:flutter_pos/menu/menu_bloc/menu_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MenuPage extends StatefulWidget {
   static const String route = '/menu';
@@ -22,7 +23,15 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Menu List'),
+        title: Text(
+          'Menu List',
+          style: GoogleFonts.rubik(
+            color: const Color(0xFF1A72DD),
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -94,16 +103,7 @@ class _MenuPageState extends State<MenuPage> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     IconButton(
-                                      onPressed: () {
-                                        context.read<CartBloc>().add(AddToCartEvent(Cart.fromMenu(menuItem)));
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text('${menuItem.name} added to cart!'))
-                                        );
-                                      },
-                                      icon: const Icon(Icons.add),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
+                                      icon: const Icon(Icons.edit, color: Color(0xFF1A72DD),),
                                       onPressed: () {
                                         showDialog(
                                           context: context, 
@@ -163,7 +163,7 @@ class _MenuPageState extends State<MenuPage> {
                                       },
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.delete),
+                                      icon: const Icon(Icons.delete, color: Colors.red),
                                       onPressed: () {
                                         showDialog(
                                           context: context,
@@ -206,6 +206,13 @@ class _MenuPageState extends State<MenuPage> {
             },
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF1A72DD),
+        onPressed: () {
+          Navigator.pushNamed(context, '/add_menu');
+        },
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

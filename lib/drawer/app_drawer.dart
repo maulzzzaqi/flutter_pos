@@ -63,7 +63,7 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
             onTap: () {
-              // Navigator.of(context).pushNamed('/account');
+              Navigator.of(context).pushNamed('/menu');
             },
           ),
           ListTile(
