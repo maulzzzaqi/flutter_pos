@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PaymentPage extends StatefulWidget {
   static const String route = '/payment';
@@ -17,6 +18,7 @@ class _PaymentPageState extends State<PaymentPage> {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
     final double subtotal = args['subtotal'];
     final String customerName = args['customerName'];
+    final List<Map<String, dynamic>> items = List<Map<String, dynamic>>.from(args['items']);
 
     return Scaffold(
       appBar: AppBar(
@@ -73,7 +75,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Choose Method Payment:',
+                      'Choose Payment Method:',
                       style: GoogleFonts.rubik(
                         color: Colors.black,
                         fontSize: 20,
@@ -110,14 +112,11 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
                 onPressed: selectedPaymentMethod.isNotEmpty 
                 ? () {
-                  Navigator.pushNamed(
-                    context,
-                    '/payment_success',
-                    arguments: {
-                      'subtotal': subtotal,
-                      'paymentMethod': selectedPaymentMethod,
-                      'customerName': customerName,
-                    }
+                  _handleTransaction(
+                    customerName,
+                    items,
+                    subtotal,
+                    selectedPaymentMethod
                   );
                 }
                 : () {
@@ -126,7 +125,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   );
                 },
                 child: Text(
-                  'Procceed Transaction',
+                  'Proceed Transaction',
                   style: GoogleFonts.rubik(
                     color: Colors.white,
                     fontSize: 16,
@@ -140,8 +139,8 @@ class _PaymentPageState extends State<PaymentPage> {
       ),
     );
   }
-  
-  paymentMethodCard(String paymentMethod, List<String> paymentLogo, {bool isCash = false}) {
+
+  Widget paymentMethodCard(String paymentMethod, List<String> paymentLogo, {bool isCash = false}) {
     bool isSelected = selectedPaymentMethod == paymentMethod;
 
     return GestureDetector(
@@ -189,24 +188,50 @@ class _PaymentPageState extends State<PaymentPage> {
                     ),
                   ),
                 ]
-              : paymentLogo.map((logo) {
-                  return Container(
-                    width: 100,
-                    height: 50,
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(3),
+                : paymentLogo.map((logo) {
+                    return Container(
+                      width: 100,
+                      height: 50,
+                      decoration: ShapeDecoration(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3),
+                        ),
                       ),
-                    ),
-                    child: Image.network(logo),
-                  );
-                }).toList(),
+                      child: Image.network(logo),
+                    );
+                  }).toList(),
               )
             ],
           )
         ),
       ),
     );
+  }
+
+  void _handleTransaction(
+    String customerName,
+    List<Map<String, dynamic>> items,
+    double subtotal,
+    String paymentMethod,
+  ) {
+    final transaction = {
+      'customerName': customerName,
+      'items': items,
+      'subtotal': subtotal,
+      'paymentMethod': paymentMethod,
+      'timestamp': Timestamp.now(),
+    };
+    
+    FirebaseFirestore.instance.collection('transactions').add(transaction)
+      .then((value) {
+        Navigator.pushNamed(context, '/payment_success', arguments: {
+          'subtotal': subtotal,
+          'paymentMethod': paymentMethod,
+          'customerName': customerName,
+        });
+      }).catchError((error) {
+        print('Failed to add transaction: $error');
+      });
   }
 }

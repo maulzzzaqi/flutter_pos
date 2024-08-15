@@ -16,6 +16,7 @@ import 'package:flutter_pos/menu/menu_page.dart';
 import 'package:flutter_pos/payment/payment_page.dart';
 import 'package:flutter_pos/payment/payment_success_page.dart';
 import 'package:flutter_pos/splash/splash_page.dart';
+import 'package:flutter_pos/transaction/transaction_history_page.dart';
 import 'package:flutter_pos/welcome/welcome_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -62,7 +63,8 @@ class MyApp extends StatelessWidget {
           AddMenuPage.route: (context) => AddMenuPage(),
           CartPage.route: (context) => CartPage(),
           PaymentPage.route: (context) => PaymentPage(),
-          PaymentSuccessPage.route: (context) => PaymentSuccessPage()
+          PaymentSuccessPage.route: (context) => PaymentSuccessPage(),
+          TransactionHistoryPage.route: (context) => TransactionHistoryPage()
         },
       ),
     );

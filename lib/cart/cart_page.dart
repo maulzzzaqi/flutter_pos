@@ -187,9 +187,14 @@ class _CartPageState extends State<CartPage> {
                               Navigator.pushNamed(
                                 context,
                                 '/payment',
-                                arguments:{
+                                arguments: {
                                   'subtotal': subtotal,
                                   'customerName': customerController.text,
+                                  'items': state.items.map((item) => {
+                                    'name': item.name,
+                                    'price': item.price,
+                                    'quantity': item.quantity,
+                                  }).toList(),
                                 }
                               );
                             }
