@@ -68,6 +68,23 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(
+              Icons.history,
+              color: Colors.white,
+            ),
+            title: Text(
+              'Transaction History',
+              style: GoogleFonts.rubik(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            onTap: () {
+              Navigator.of(context).pushNamed('/history');
+            },
+          ),
+          ListTile(
+            leading: const Icon(
               Icons.logout,
               color: Colors.white,
             ),
