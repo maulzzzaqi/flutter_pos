@@ -8,6 +8,7 @@ import 'package:flutter_pos/cart/model/cart.dart';
 import 'package:flutter_pos/drawer/app_drawer.dart';
 import 'package:flutter_pos/menu/add_menu_page.dart';
 import 'package:flutter_pos/menu/menu_bloc/menu_bloc.dart';
+import 'package:flutter_pos/menu/model/menu.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,11 +20,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  TextEditingController searchController = TextEditingController();
+  List<Menu> filteredMenuList = [];
+
   @override
   void initState() {
     context.read<MenuBloc>().add(const LoadMenuEvent());
     super.initState();
   }
+
+  void _filterMenu(String query) {
+    final state = context.read<MenuBloc>().state;
+    if (state is MenuLoaded) {
+      setState(() {
+        filteredMenuList = state.menu
+            .where((menuItem) => menuItem.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,18 +55,43 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       drawer: AppDrawer(),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            BlocBuilder<MenuBloc, MenuState>(
-              builder: (context, state) {
-                if (state is MenuLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is MenuLoaded) {
-                  final menuList = state.menu.toList();
-                  return Expanded(
-                    child: GridView.builder(
+            TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                hintText: 'Search products...',
+                hintStyle: GoogleFonts.rubik(
+                  color: Colors.black54,
+                  fontSize: 18,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                prefixIcon: const Icon(Icons.search),
+              ),
+              style: GoogleFonts.rubik(
+                color: Colors.black87,
+                fontSize: 18,
+              ),
+              onChanged: (query) {
+                _filterMenu(query);
+              },
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: BlocBuilder<MenuBloc, MenuState>(
+                builder: (context, state) {
+                  if (state is MenuLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is MenuLoaded) {
+                    final menuList = searchController.text.isEmpty
+                        ? state.menu.toList()
+                        : filteredMenuList;
+
+                    return GridView.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         crossAxisSpacing: 10,
@@ -72,25 +113,25 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   menuItem.imageUrl != null
-                                    ? Image.network(
-                                        menuItem.imageUrl!,
-                                        fit: BoxFit.cover,
-                                        height: 120,
-                                        width: double.infinity,
-                                      )
-                                    : Container(
-                                        height: 120,
-                                        color: Colors.grey.shade300,
-                                        child: const Center(
-                                          child: Text(
-                                            'No Image',
-                                            style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 14,
+                                      ? Image.network(
+                                          menuItem.imageUrl!,
+                                          fit: BoxFit.cover,
+                                          height: 120,
+                                          width: double.infinity,
+                                        )
+                                      : Container(
+                                          height: 120,
+                                          color: Colors.grey.shade300,
+                                          child: const Center(
+                                            child: Text(
+                                              'No Image',
+                                              style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 14,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
                                   const SizedBox(height: 8),
                                   Expanded(
                                     child: Column(
@@ -110,11 +151,11 @@ class _HomePageState extends State<HomePage> {
                                           menuItem.description,
                                           style: GoogleFonts.rubik(
                                             color: Colors.black,
-                                            fontSize: 14,
+                                            fontSize: 12,
                                             fontWeight: FontWeight.w400,
                                           ),
                                           maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
+                                          overflow: TextOverflow.clip,
                                         ),
                                       ],
                                     ),
@@ -160,13 +201,13 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                    ),
-                  );
-                } else if (state is MenuError) {
-                  return Center(child: Text('Failed to load menu: ${state.error}'));
-                }
-                return Container();
-              },
+                    );
+                  } else if (state is MenuError) {
+                    return Center(child: Text('Failed to load menu: ${state.error}'));
+                  }
+                  return Container();
+                },
+              ),
             ),
           ],
         ),
