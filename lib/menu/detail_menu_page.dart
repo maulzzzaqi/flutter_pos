@@ -225,6 +225,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                                 category,
                                 menuImage,
                               ));
+                              Navigator.popAndPushNamed(context, '/home');
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Please select a category')),
@@ -254,7 +255,7 @@ class _DetailMenuPageState extends State<DetailMenuPage> {
                           ),
                           onPressed: () {
                             context.read<MenuBloc>().add(DeleteMenuEvent(widget.menuId));
-                            Navigator.pop(context);
+                            Navigator.popAndPushNamed(context, '/home');
                           },
                           child: Text(
                             'Delete',
