@@ -42,9 +42,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CartBloc(),
         ),
-        BlocProvider(
-          create: (context) => TransactionBloc(),
-        ),
       ],
       child: MaterialApp(
         title: 'POS App',
