@@ -121,6 +121,106 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                 );
               },
             ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(
+                        'Filter Transactions',
+                        style: GoogleFonts.rubik(
+                          color: const Color(0xFF1A72DD),
+                          fontSize: 24,
+                          fontWeight: FontWeight.w400
+                        ),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextField(
+                            decoration: InputDecoration(
+                              labelText: 'Min Price',
+                              labelStyle: GoogleFonts.rubik(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400
+                              )
+                            ),
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              minPrice = double.tryParse(value);
+                            },
+                          ),
+                          TextField(
+                            decoration: InputDecoration(
+                              labelText: 'Max Price',
+                              labelStyle: GoogleFonts.rubik(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400
+                              )
+                            ),
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              maxPrice = double.tryParse(value);
+                            },
+                          ),
+                          TextField(
+                            decoration: InputDecoration(
+                              labelText: 'Start Date',
+                              labelStyle: GoogleFonts.rubik(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400
+                              )
+                            ),
+                            readOnly: true,
+                            onTap: () async {
+                              final date = await showDatePicker(
+                                context: context,
+                                initialDate: startDate ?? DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime.now(),
+                              );
+                              if (date != null) {
+                                setState(() {
+                                  startDate = date;
+                                });
+                              }
+                            },
+                          ),
+                          TextField(
+                            decoration: InputDecoration(labelText: 'End Date'),
+                            readOnly: true,
+                            onTap: () async {
+                              final date = await showDatePicker(
+                                context: context,
+                                initialDate: endDate ?? DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime.now(),
+                              );
+                              if (date != null) {
+                                setState(() {
+                                  endDate = date;
+                                });
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            _fetchTransactions();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Apply Filters'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: const Icon(Icons.filter_list),
+            ),
     );
   }
 }
