@@ -7,6 +7,11 @@ class PaymentSuccessPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final double subtotal = args['subtotal'];
+    final String paymentMethod = args['paymentMethod'];
+    final String customerName = args['customerName'];
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -61,7 +66,7 @@ class PaymentSuccessPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Method Payment: CASH',
+                                  'Orderer: $customerName',
                                   style: GoogleFonts.rubik(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -71,7 +76,17 @@ class PaymentSuccessPage extends StatelessWidget {
                                 const SizedBox(height: 8),
                                 const Divider(thickness: 0.5, color: Colors.white,),
                                 Text(
-                                  'Total Price: \$33.00',
+                                  'Method Payment: $paymentMethod',
+                                  style: GoogleFonts.rubik(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                const Divider(thickness: 0.5, color: Colors.white,),
+                                Text(
+                                  'Total Price: Rp. $subtotal',
                                   style: GoogleFonts.rubik(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -98,7 +113,8 @@ class PaymentSuccessPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.popUntil(context, ModalRoute.withName('/home'));},
                     child: Text(
                       'NEXT ORDER',
                       style: GoogleFonts.rubik(

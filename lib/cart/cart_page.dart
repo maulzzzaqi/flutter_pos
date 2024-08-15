@@ -184,7 +184,14 @@ class _CartPageState extends State<CartPage> {
                               ),
                             ),
                             onPressed: isButtonEnabled ? () {
-                              Navigator.pushNamed(context, '/payment');
+                              Navigator.pushNamed(
+                                context,
+                                '/payment',
+                                arguments:{
+                                  'subtotal': subtotal,
+                                  'customerName': customerController.text,
+                                }
+                              );
                             }
                             : () {
                               ScaffoldMessenger.of(context).showSnackBar(
