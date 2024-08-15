@@ -1,6 +1,6 @@
-# flutter_pos
+# POS app
 
-A new Flutter project.
+Flutter Point-of-Sale app made to place an order.
 
 ## Getting Started
 
